@@ -15,6 +15,7 @@ public class WicketWebInitializer implements WebApplicationInitializer {
 
         // 2. Registers configuration classes
         context.register(AppConfig.class, DatabaseConfig.class);
+        context.register(AppConfig.class, SecurityConfig.class);
 
         // 3. Sets up Spring context listener
         sc.addListener(new ContextLoaderListener(context));

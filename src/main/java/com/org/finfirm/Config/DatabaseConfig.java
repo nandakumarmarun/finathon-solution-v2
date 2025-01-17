@@ -4,6 +4,7 @@ package com.org.finfirm.Config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.*;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -19,6 +20,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+@EnableJpaRepositories("com.org.finfirm.repository")
 public class DatabaseConfig implements WebMvcConfigurer {
 
     private static String[] packagesToScan = new String[] {"com.org.finfirm"};
@@ -33,7 +35,7 @@ public class DatabaseConfig implements WebMvcConfigurer {
         hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/Finfirm");  // Replace with your PostgreSQL URL
         hikariConfig.setDriverClassName("org.postgresql.Driver");
         hikariConfig.setUsername("postgres");  // Replace with your database username
-        hikariConfig.setPassword("Pass@sales");  // Replace with your database password
+        hikariConfig.setPassword("root");  // Replace with your database password
 
         // Set additional properties for Hikari if needed (e.g., pool size)
         hikariConfig.setMaximumPoolSize(10);  // Example pool size

@@ -1,6 +1,6 @@
 package com.org.finfirm.Config;
 
-import com.org.finfirm.IndexPage;
+import com.org.finfirm.Pages.IndexPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
