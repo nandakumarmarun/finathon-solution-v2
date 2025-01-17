@@ -7,10 +7,13 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Arrays;
@@ -20,19 +23,39 @@ import java.util.Arrays;
 public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/register").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/", "/index", "/login", "/register","/save-user").permitAll()
+                .antMatchers("/home").authenticated() // Protect /home with authentication
+                .anyRequest().permitAll()  // Protect all other URLs with authentication
                 .and()
                 .formLogin()
-                .loginPage("/login") // Custom login page
+                .loginPage("/login")  // Custom login page
+                .defaultSuccessUrl("/home", true)  // Redirect to /home after successful login
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll(); // Allow all to log out
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
 
         return http.build();
+    }
+
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedSlash(true);
+        firewall.setAllowSemicolon(true);
+        firewall.setAllowBackSlash(false);
+        firewall.setAllowUrlEncodedDoubleSlash(true);
+        firewall.setAllowUrlEncodedPercent(true);
+        return firewall;
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.httpFirewall(allowUrlEncodedSlashHttpFirewall());
     }
 
     @Bean

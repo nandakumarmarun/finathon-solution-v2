@@ -5,9 +5,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,22 +23,31 @@ public class LoginPage extends WebPage {
     private AuthenticationManager authenticationManager;
     public LoginPage() {
 
+        FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+        add(feedbackPanel);
+
+        // Creating a login form
         // Creating a login form
         Form<Void> loginForm = new Form<Void>("loginForm") {
             @Override
             protected void onSubmit() {
+                if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+                    error("Username and password must be provided");
+                    return;
+                }
+
                 // Create an authentication token
                 UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
                 try {
                     // Authenticate the user using the AuthenticationManager
                     Authentication authentication = authenticationManager.authenticate(authRequest);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                    // Redirect to home page upon successful login
-                    setResponsePage(IndexPage.class);
-                } catch (Exception e) {
-                    // Handle authentication failure
+                } catch (BadCredentialsException e) {
+                    // Handle invalid username/password
                     error("Invalid username or password");
+                } catch (Exception e) {
+                    // Handle other exceptions
+                    error("An error occurred during login");
                 }
             }
         };
