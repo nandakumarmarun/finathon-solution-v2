@@ -3,6 +3,7 @@ package com.org.finfirm.Config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -21,62 +22,73 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("com.org.finfirm.repository")
+@PropertySource("classpath:application.properties")
 public class DatabaseConfig implements WebMvcConfigurer {
+
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
+
+    @Value("${spring.datasource.username}")
+    private String dbUsername;
+
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClassName;
+
+    @Value("${spring.jpa.database-platform}")
+    private String hibernateDialect;
+
+    @Value("${spring.jpa.hibernate.ddl-auto}")
+    private String hibernateDdlAuto;
+
+    @Value("${spring.jpa.show-sql:false}")  // default value if property is missing
+    private String showSql;
+
+    @Value("${spring.jpa.properties.hibernate.format_sql:false}")
+    private String formatSql;
+
+    @Value("${spring.datasource.hikari.maximum-pool-size:10}")
+    private int maximumPoolSize;
 
     private static String[] packagesToScan = new String[] {"com.org.finfirm"};
 
     @Primary
     @Bean
     public DataSource dataSource() {
-        // Configure HikariCP
         HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(dbUrl);
+        hikariConfig.setDriverClassName(driverClassName);
+        hikariConfig.setUsername(dbUsername);
+        hikariConfig.setPassword(dbPassword);
 
-        // PostgreSQL JDBC connection details (directly defined)
-        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/Finfirm");  // Replace with your PostgreSQL URL
-        hikariConfig.setDriverClassName("org.postgresql.Driver");
-        hikariConfig.setUsername("postgres");  // Replace with your database username
-        hikariConfig.setPassword("root");  // Replace with your database password
+        hikariConfig.setMaximumPoolSize(10);
 
-        // Set additional properties for Hikari if needed (e.g., pool size)
-        hikariConfig.setMaximumPoolSize(10);  // Example pool size
-
-        // Return the HikariDataSource instance
         return new HikariDataSource(hikariConfig);
     }
 
     @Primary
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        // Configure the JPA EntityManagerFactory
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-
-        // Set the data source for the factory
         entityManagerFactoryBean.setDataSource(dataSource());
-
-        // Use Hibernate as the JPA vendor
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-
-        // Set the package(s) to scan for JPA entities
         entityManagerFactoryBean.setPackagesToScan(packagesToScan);
-
-        // Set additional Hibernate properties
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");  // Example Hibernate setting
-        properties.setProperty("hibernate.show_sql", "true");  // Show SQL in logs (optional)
+        properties.setProperty("hibernate.dialect", hibernateDialect);
+        properties.setProperty("hibernate.hbm2ddl.auto", hibernateDdlAuto);  // Example Hibernate setting
+        properties.setProperty("hibernate.show_sql", showSql);  // Show SQL in logs (optional)
         entityManagerFactoryBean.setJpaProperties(properties);
-
         return entityManagerFactoryBean;
     }
 
     @Primary
     @Bean
     public JpaTransactionManager transactionManager() {
-        // Configure the JPA transaction manager
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
-
 
 }
