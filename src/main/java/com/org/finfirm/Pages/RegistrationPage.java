@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,22 @@ public class RegistrationPage extends WebPage {
                 UserDto savedUser = userServices.saveUser(userDto);
                 // You can add a success message here or redirect to another page
                 info("User registered successfully: " + savedUser.getUserName());
+                if(savedUser != null){
+                    setResponsePage(LoginPage.class);
+                }
             }
         };
 
         registrationForm.add(usernameField);
         registrationForm.add(passwordField);
         add(registrationForm);
+
+        add(new Link<Void>("cancelBtn") {
+            @Override
+            public void onClick() {
+                setResponsePage(IndexPage.class);
+            }
+        });
     }
 
     @Override

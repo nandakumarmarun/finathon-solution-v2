@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -61,6 +62,13 @@ public class LoginPage extends WebPage {
 
         // Add the form to the page
         add(loginForm);
+
+        add(new Link<Void>("cancelBtn") {
+            @Override
+            public void onClick() {
+                setResponsePage(IndexPage.class);
+            }
+        });
     }
 
     @Override
