@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@EnableWebMvc // Enables Spring MVC
+@EnableWebMvc
 @ComponentScan(basePackages = "com.org.finfirm")
 @Import({DatabaseConfig.class,SecurityConfig.class})
 public class AppConfig {

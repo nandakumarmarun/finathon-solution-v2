@@ -28,7 +28,7 @@ public class SecurityConfig{
                 .authorizeRequests()
                 .antMatchers("/", "/index", "/login", "/register","/save-user").permitAll()
                 .antMatchers("/home").authenticated() // Protect /home with authentication
-                .anyRequest().permitAll()  // Protect all other URLs with authentication
+                .anyRequest().authenticated()  // Protect all other URLs with authentication
                 .and()
                 .formLogin()
                 .loginPage("/login")  // Custom login page
