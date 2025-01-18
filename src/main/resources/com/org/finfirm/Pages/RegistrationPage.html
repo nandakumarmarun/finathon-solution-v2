@@ -5,19 +5,30 @@
   <title>Registration Page</title>
 </head>
 <body>
-<h1>Registration Page</h1>
-<form wicket:id="registrationForm">
-  <div>
-    <label for="username">Username:</label>
-    <input type="text" wicket:id="username" id="username" />
+
+
+<div class="container">
+  <div class="card m-5">
+    <div class="card-header text-center">
+      <h5>Registration Page</h5>
+    </div>
+    <div class="card-body">
+      <form wicket:id="registrationForm">
+        <div class="mb-3" >
+          <label for="username" class="form-label">username</label>
+          <input class="form-control" type="text" wicket:id="username" id="username" />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input class="form-control" type="password" wicket:id="password" id="password" />
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-secondary col-12" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" wicket:id="password" id="password" />
-  </div>
-  <div>
-    <button type="submit">Login</button>
-  </div>
-</form>
+</div>
+
 </body>
 </html>

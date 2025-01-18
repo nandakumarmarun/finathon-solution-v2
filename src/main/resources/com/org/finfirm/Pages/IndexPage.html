@@ -2,14 +2,23 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Page</title>
 </head>
-<body>
-<h1 wicket:id="welcomeMessage"></h1>  <!-- Placeholder for the welcome message -->
+<body class="d-flex justify-content-center align-items-center">
 
-<!-- Button that redirects to the login page -->
-<a wicket:id="loginButton">
-    <button>Go to Login</button>
-</a>
+<div class="card text-center m-3">
+    <div class="card-header">
+        Featured
+    </div>
+    <div class="card-body">
+        <h5 wicket:id="welcomeMessage">Welcome to Our Website!</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a wicket:id="loginButton" class="btn btn-primary">Go to Login <!--  <button>Go to Login</button>-->
+        </a>
+        <a wicket:id="regButton" class="btn btn-primary">Go to Registration <!--  <button>Go to Login</button>-->
+        </a>
+    </div>
+</div>
 </body>
 </html>

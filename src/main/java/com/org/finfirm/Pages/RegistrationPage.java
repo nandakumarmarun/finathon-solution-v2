@@ -2,6 +2,9 @@ package com.org.finfirm.Pages;
 
 import com.org.finfirm.dto.UserDto;
 import com.org.finfirm.services.UserServices;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -40,5 +43,13 @@ public class RegistrationPage extends WebPage {
         registrationForm.add(usernameField);
         registrationForm.add(passwordField);
         add(registrationForm);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        // Include Bootstrap CSS from a CDN
+        response.render(CssHeaderItem.forUrl("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"));
+        response.render(JavaScriptHeaderItem.forUrl("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"));
     }
 }

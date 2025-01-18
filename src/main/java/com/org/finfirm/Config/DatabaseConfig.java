@@ -35,7 +35,7 @@ public class DatabaseConfig implements WebMvcConfigurer {
         hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/Finfirm");  // Replace with your PostgreSQL URL
         hikariConfig.setDriverClassName("org.postgresql.Driver");
         hikariConfig.setUsername("postgres");  // Replace with your database username
-        hikariConfig.setPassword("Pass@sales");  // Replace with your database password
+        hikariConfig.setPassword("root");  // Replace with your database password
 
         // Set additional properties for Hikari if needed (e.g., pool size)
         hikariConfig.setMaximumPoolSize(10);  // Example pool size
